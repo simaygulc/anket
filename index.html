@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reklamda Görünce İndirten Mobil Oyunlar</title>
+  <style>
+    :root{
+      --bg1:#fff1f8;
+      --bg2:#f6f4ff;
+      --card:#ffffffcc;
+      --text:#1e1a2b;
+      --muted:#5d5672;
+      --hot:#ff2d8d;
+      --hot2:#7c3aed;
+      --mint:#22c55e;
+      --sun:#f59e0b;
+      --shadow: 0 14px 40px rgba(31, 15, 69, .12);
+      --radius: 20px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 900px at 10% 0%, #ffd1ea 0%, transparent 60%),
+        radial-gradient(900px 700px at 100% 20%, #d8c7ff 0%, transparent 55%),
+        radial-gradient(900px 700px at 30% 100%, #c7fff0 0%, transparent 55%),
+        radial-gradient(900px 700px at 70% 90%, #ffe7b7 0%, transparent 55%),
+        linear-gradient(120deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .wrap{width:min(960px, 100%)}
+    header{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-end;
+      margin-bottom:14px;
+    }
+    .brand{display:flex; gap:12px; align-items:center;}
+    .logo{
+      width:46px;height:46px;border-radius:16px;
+      background:
+        radial-gradient(circle at 30% 30%, #fff 0 18%, transparent 19%),
+        radial-gradient(circle at 70% 30%, #fff 0 18%, transparent 19%),
+        radial-gradient(circle at 50% 75%, rgba(255,255,255,.9) 0 12%, transparent 13%),
+        linear-gradient(135deg, var(--hot), var(--hot2));
+      box-shadow: 0 10px 25px rgba(255,45,141,.25);
+    }
+    h1{font-size:22px;margin:0}
+    .sub{margin:4px 0 0; color:var(--muted); font-size:14px}
+    .badge{
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(124,58,237,.18);
+      box-shadow: 0 10px 18px rgba(31, 15, 69, .06);
+      font-size:13px;
+      color: #3b2b5f;
+      white-space:nowrap;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .badge b{color:#6b1037}
+
+    .card{
+      background: var(--card);
+      border:1px solid rgba(255,45,141,.18);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .topbar{
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      background:
+        linear-gradient(90deg, rgba(255,45,141,.14), rgba(124,58,237,.12), rgba(34,197,94,.12), rgba(245,158,11,.10));
+      border-bottom:1px solid rgba(31, 15, 69, .08);
+    }
+    .progress{
+      height:10px; width:100%;
+      background: rgba(255,255,255,.78);
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(31, 15, 69, .08);
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--hot), var(--hot2), var(--mint), var(--sun));
+      border-radius:999px;
+      transition: width .35s ease;
+    }
+    .step{font-size:13px;color:var(--muted);white-space:nowrap;}
+    .content{padding:18px 18px 6px}
+    .intro{padding:16px 16px 0;}
+    .introcard{
+      border-radius:18px;
+      padding:14px 14px;
+      border:1px dashed rgba(255,45,141,.28);
+      background: rgba(255,255,255,.62);
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .introemoji{font-size:22px; line-height:1}
+    .introtext{font-size:13.5px;color:#3b2b5f}
+    .introtext b{color:#6b1037}
+
+    .qtitle{font-size:18px;margin:6px 0 10px;letter-spacing:.1px;}
+    .qhint{color:var(--muted);font-size:13px;margin:0 0 14px;}
+
+    .options{display:grid;gap:10px;margin:12px 0 4px}
+    .opt{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:12px 12px;border-radius:16px;
+      border:1px solid rgba(31, 15, 69, .10);
+      background: rgba(255,255,255,.82);
+      cursor:pointer;
+      transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .opt:hover{ transform: translateY(-1px); border-color: rgba(255,45,141,.35); box-shadow: 0 12px 22px rgba(31,15,69,.08);}
+    .opt input{margin-top:3px}
+    .opt .label{line-height:1.25}
+
+    .tag{
+      display:inline-block;
+      font-size:12px;
+      padding:2px 8px;
+      border-radius:999px;
+      margin-left:8px;
+      background: rgba(255,45,141,.10);
+      border:1px solid rgba(255,45,141,.20);
+      color:#7a1a4a;
+      vertical-align:middle;
+    }
+    .footer{
+      padding:14px 18px 18px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    button{
+      appearance:none;border:0;border-radius:14px;
+      padding:12px 14px;font-weight:650;
+      cursor:pointer;
+      transition: transform .08s ease, filter .15s ease, opacity .15s ease;
+      display:inline-flex;align-items:center;gap:10px;
+    }
+    button:active{transform: translateY(1px)}
+    .btn-ghost{
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(31, 15, 69, .10);
+      color: #3b2b5f;
+    }
+    .btn-hot{
+      background: linear-gradient(135deg, var(--hot), var(--hot2));
+      color:white;
+      box-shadow: 0 14px 30px rgba(255,45,141,.22);
+    }
+    .btn-hot[disabled]{opacity:.55; cursor:not-allowed}
+    .small{color:var(--muted);font-size:12.5px;}
+    .count{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      background: rgba(34,197,94,.12);
+      border:1px solid rgba(34,197,94,.25);
+      color:#14532d;
+      font-size:12px;
+      margin-left:8px;
+    }
+    .toast{
+      margin-top:12px;padding:12px 14px;border-radius:16px;
+      background: rgba(34,197,94,.12);
+      border:1px solid rgba(34,197,94,.25);
+      color:#14532d;display:none;
+    }
+    .error{
+      margin-top:12px;padding:12px 14px;border-radius:16px;
+      background: rgba(255,45,141,.10);
+      border:1px solid rgba(255,45,141,.22);
+      color:#6b1037;display:none;
+    }
+    .thanks{padding:26px 18px 22px;text-align:center;}
+    .big{font-size:22px;margin:0 0 8px;}
+    .emoji{font-size:44px;line-height:1;margin:10px 0 10px;filter: drop-shadow(0 12px 18px rgba(31,15,69,.12));}
+    .pillrow{margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+    .pill{
+      padding:8px 10px;border-radius:999px;
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(31, 15, 69, .10);
+      font-size:12.5px;color:#3b2b5f;
+    }
+    code.inline{
+      background: rgba(255,255,255,.75);
+      border:1px solid rgba(31, 15, 69, .10);
+      padding:2px 6px;
+      border-radius:10px;
+      font-size:12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Reklamda Görünce İndirten Mobil Oyunlar</h1>
+          <p class="sub">Ortalama <b>2 dakika</b>. Cevaplar anonimdir ve sadece araştırma amaçlıdır.</p>
+        </div>
+      </div>
+      <div class="badge">🎀 <b>Anonim</b> • 10 soru • Şıklı</div>
+    </header>
+
+    <div class="card" id="card">
+      <div class="intro">
+        <div class="introcard">
+          <div class="introemoji">📌</div>
+          <div class="introtext">
+            Bu mini anket, reklamlarda karşımıza çıkan <b>mini-oyun formatlarının</b> hangilerinin gerçekten dikkat çektiğini anlamaya yardımcı olur.
+            Kişisel bilgi sormuyoruz. (İsterseniz sonuçları Sheets'e yazdırabilirsiniz.)
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar">
+        <div class="progress" aria-label="İlerleme">
+          <div class="bar" id="bar"></div>
+        </div>
+        <div class="step" id="step">1 / 10</div>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footer" id="footer">
+        <button class="btn-ghost" id="backBtn">← Geri</button>
+        <div class="small" id="help">Seçimini yap, devam et.</div>
+        <button class="btn-hot" id="nextBtn" disabled>Devam →</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Cevapların kaydedildi. Teşekkürler!</div>
+    <div class="error" id="error">⚠️ Kaydetme sırasında bir sorun oldu. Lütfen tekrar dene.</div>
+  </div>
+
+  <script>
+    // Buraya Apps Script Web App URL'ini yapıştır:
+    // Örn: https://script.google.com/macros/s/....../exec
+    const SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
+
+    const questions = [
+      {
+        id: "q1",
+        title: "Reklamda gördüğün bir mobil oyunu son 30 günde indirdin mi?",
+        hint: "En yakın seçeneği işaretle.",
+        type: "single",
+        options: ["Evet, birkaç kez", "Evet, 1 kez", "Hayır ama indirmeyi düşündüm", "Hayır, hiç"]
+      },
+      {
+        id: "q2",
+        title: "Bu oyunları en çok nerede görüyorsun?",
+        hint: "En sık karşılaştığın kanalı seç.",
+        type: "single",
+        options: ["Instagram / TikTok", "YouTube", "Başka oyunların içindeki reklamlar", "App Store / Google Play önerileri", "Arkadaş/çevre", "Diğer"]
+      },
+      {
+        id: "q3",
+        title: "Reklamda en çok hangi “mini-oyun” formatı seni yakalıyor?",
+        hint: "En fazla 2 seçim yapabilirsin.",
+        type: "multi",
+        max: 2,
+        options: [
+          "Blok patlatma / renk eşleştirme (Block Blast tipi)",
+          "Pull the pin (pini çek, doğru sırayla çöz)",
+          "Water sort (renkli sıvı ayırma)",
+          "Screw puzzle (vida sökme / parçaları çıkarma)",
+          "Parking / traffic jam (park etme, trafik çözme)",
+          "Merge (birleştir-büyüt)",
+          "Runner (koşu/engel)",
+          "Temizlik/düzenleme/ASMR tatmini"
+        ]
+      },
+      {
+        id: "q4",
+        title: "Reklamda hangi “duygu” seni daha çok indirtiyor?",
+        hint: "Tek seçim.",
+        type: "single",
+        options: [
+          "“Bunu ben daha iyi yaparım” (fail reklamları)",
+          "“Çözmesi tatmin edecek” hissi",
+          "“Hızlıca oynayıp geçerim” hissi",
+          "“Görsel/ses çok tatmin edici”",
+          "“Komik/yaratıcı reklam”"
+        ]
+      },
+      {
+        id: "q5",
+        title: "Reklamın şu tarafı seni daha çok etkiler:",
+        hint: "Tek seçim.",
+        type: "single",
+        options: [
+          "5–10 saniyede oyun net anlaşılır",
+          "Seviye geçişleri hızlı ve akıcı",
+          "Zor karar anı var (hangi ip/vida/hamle?)",
+          "Ödül/upgrade gösteriyor",
+          "Çok güzel grafik/tema"
+        ]
+      },
+      {
+        id: "q6",
+        title: "Aşağıdaki reklam vaatlerinden hangisi sende “indiririm” tepkisi yaratır?",
+        hint: "Tek seçim.",
+        type: "single",
+        options: [
+          "Tek elle oynanır, hızlı",
+          "Zeka/bulmaca çözme",
+          "Rahatlatıcı / stres atmalık",
+          "Rekabet/leaderboard",
+          "Hikaye/ilerleme",
+          "Hiçbiri, reklama güvenmem"
+        ]
+      },
+      {
+        id: "q7",
+        title: "Reklamdaki oyun, indirince farklı çıkarsa ne yaparsın?",
+        hint: "Tek seçim.",
+        type: "single",
+        options: ["Hemen silerim", "5–10 dakika denerim, sararsa kalır", "Fark etmez, eğlenceliyse devam", "Daha önce yaşamadım"]
+      },
+      {
+        id: "q8",
+        title: "İndirmeden önce mağaza sayfasında en çok neye bakarsın?",
+        hint: "Tek seçim.",
+        type: "single",
+        options: ["Puan/yorumlar", "Reklam sayısı (yorumlarda)", "Video/fragman", "Ekran görüntüleri", "Boyut (MB)", "Hiç bakmadan indiririm"]
+      },
+      {
+        id: "q9",
+        title: "Bu reklam oyunlarında seni en çok soğutan şey:",
+        hint: "Tek seçim.",
+        type: "single",
+        options: ["Aşırı reklam / oyun oynatmaması", "Reklamın yalan çıkması", "Çok uzun reklam", "Aşırı abartılı ses/efekt", "Aynı reklamın sürekli çıkması"]
+      },
+      {
+        id: "q10",
+        title: "Bu tarz reklam mini-oyunlarını genel olarak nasıl değerlendirirsin?",
+        hint: "Tek seçim.",
+        type: "single",
+        options: ["Çok severim / özellikle ararım", "Severim", "Nötrüm", "Pek sevmem", "Hiç sevmem"]
+      }
+    ];
+
+    const state = { i: 0, answers: {} };
+
+    const content = document.getElementById("content");
+    const backBtn = document.getElementById("backBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const step = document.getElementById("step");
+    const bar = document.getElementById("bar");
+    const toast = document.getElementById("toast");
+    const error = document.getElementById("error");
+    const help = document.getElementById("help");
+    const footer = document.getElementById("footer");
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function updateNextEnabled(){
+      const q = questions[state.i];
+      const a = state.answers[q.id];
+      const ok = (q.type === "single")
+        ? (typeof a === "string" && a.length > 0)
+        : (Array.isArray(a) && a.length > 0);
+      nextBtn.disabled = !ok;
+    }
+
+    function selectedCountText(q){
+      if (q.type !== "multi") return "";
+      const arr = Array.isArray(state.answers[q.id]) ? state.answers[q.id] : [];
+      const left = (q.max || 999) - arr.length;
+      return `<span class="count">${left} seçim kaldı</span>`;
+    }
+
+    function render(){
+      toast.style.display = "none";
+      error.style.display = "none";
+
+      const q = questions[state.i];
+      const total = questions.length;
+      step.textContent = `${state.i + 1} / ${total}`;
+      bar.style.width = `${Math.round(((state.i) / total) * 100)}%`;
+
+      backBtn.disabled = state.i === 0;
+      backBtn.style.opacity = backBtn.disabled ? .6 : 1;
+
+      const existing = state.answers[q.id];
+
+      help.innerHTML = (q.type === "multi")
+        ? `En fazla ${q.max} seçim. ${selectedCountText(q)}`
+        : "Tek seçim.";
+
+      let html = `
+        <div class="qtitle">${escapeHtml(q.title)}</div>
+        <div class="qhint">${escapeHtml(q.hint || "")}</div>
+        <div class="options" role="group" aria-label="${escapeHtml(q.title)}">
+      `;
+
+      q.options.forEach((opt) => {
+        const isMulti = q.type === "multi";
+        const inputType = isMulti ? "checkbox" : "radio";
+        const checked = isMulti
+          ? (Array.isArray(existing) && existing.includes(opt))
+          : (existing === opt);
+
+        const tag = (isMulti && q.max === 2) ? `<span class="tag">en fazla 2</span>` : "";
+
+        html += `
+          <label class="opt">
+            <input
+              type="${inputType}"
+              name="${q.id}"
+              value="${escapeHtml(opt)}"
+              ${checked ? "checked" : ""}
+              aria-label="${escapeHtml(opt)}"
+            />
+            <div class="label">${escapeHtml(opt)} ${tag}</div>
+          </label>
+        `;
+      });
+
+      html += `</div>`;
+      content.innerHTML = html;
+
+      content.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("change", () => onSelect(q, inp.value, inp.checked));
+      });
+
+      nextBtn.textContent = (state.i === total - 1) ? "Gönder ✓" : "Devam →";
+      updateNextEnabled();
+    }
+
+    function onSelect(q, value, checked){
+      if (q.type === "single") {
+        state.answers[q.id] = value;
+      } else {
+        const arr = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
+        if (checked) {
+          if (!arr.includes(value)) arr.push(value);
+          const max = q.max || arr.length;
+          if (arr.length > max) {
+            // Fazla seçildiyse en eskiyi çıkar (kullanıcıyı yormadan)
+            arr.shift();
+          }
+        } else {
+          const i = arr.indexOf(value);
+          if (i >= 0) arr.splice(i, 1);
+        }
+        state.answers[q.id] = arr;
+        help.innerHTML = `En fazla ${q.max} seçim. ${selectedCountText(q)}`;
+        render(); // checkbox senkronu
+        return;
+      }
+      updateNextEnabled();
+    }
+
+    async function submit(){
+      // doğrulama
+      for (const q of questions) {
+        const a = state.answers[q.id];
+        const ok = (q.type === "single")
+          ? (typeof a === "string" && a.length > 0)
+          : (Array.isArray(a) && a.length > 0);
+        if (!ok) {
+          state.i = questions.findIndex(x => x.id === q.id);
+          render();
+          return;
+        }
+      }
+
+      const payload = {
+        meta: { ts: new Date().toISOString(), ua: navigator.userAgent },
+        answers: state.answers
+      };
+
+      if (!SCRIPT_URL || SCRIPT_URL.includes("PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE")) {
+        // fallback: JSON indir
+        const blob = new Blob([JSON.stringify(payload, null, 2)], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "anket_cevaplari.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        showThanks("Google Sheets bağlantısı eklenmediği için cevaplar JSON olarak indirildi. İstersen <code class='inline'>SCRIPT_URL</code> alanına Apps Script linkini yapıştır.");
+        return;
+      }
+
+      nextBtn.disabled = true;
+      nextBtn.textContent = "Gönderiliyor…";
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || "Request failed");
+        showThanks();
+      } catch (e) {
+        error.style.display = "block";
+        nextBtn.disabled = false;
+        nextBtn.textContent = "Gönder ✓";
+      }
+    }
+
+    function showThanks(note){
+      bar.style.width = "100%";
+      step.textContent = `${questions.length} / ${questions.length}`;
+      footer.style.display = "none";
+      content.innerHTML = `
+        <div class="thanks">
+          <div class="emoji">🩷✨</div>
+          <p class="big"><b>Teşekkürler!</b> Cevabın kaydedildi.</p>
+          <p class="sub" style="margin:0;color:var(--muted)">
+            ${note ? note : "Katkın, reklamlarda gerçekten hangi mini-oyun formatlarının “indirttiğini” anlamamıza yardımcı olacak."}
+          </p>
+          <div class="pillrow">
+            <span class="pill">Anonim</span>
+            <span class="pill">~2 dakika</span>
+            <span class="pill">10 soru</span>
+            <span class="pill">Şıklı</span>
+          </div>
+        </div>
+      `;
+      toast.style.display = "block";
+    }
+
+    backBtn.addEventListener("click", () => {
+      state.i = clamp(state.i - 1, 0, questions.length - 1);
+      render();
+    });
+
+    nextBtn.addEventListener("click", async () => {
+      if (state.i === questions.length - 1) return submit();
+      state.i = clamp(state.i + 1, 0, questions.length - 1);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
